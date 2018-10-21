@@ -12,6 +12,12 @@ to this signature for use as Redux thunks
 const action = payload => (dispatch, getState, extraArguments) => {}
 ```
 
+## Installation
+
+```
+npm i -S redux-funky-thunk
+```
+
 ## Why
 
 Using the dependencies-first signature makes it easier to compose actions together, like so.

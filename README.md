@@ -3,7 +3,7 @@
 Converts functions with this signature
 
 ```
-const action = ({ dispatch, getState, /* dependencies */ }) => payload => {}
+const action = ({ dispatch, getState, ...extraArguments }) => payload => {}
 ```
 
 to this signature for use as Redux thunks
@@ -69,4 +69,27 @@ const mapDispatchToProps = {
   postUser: funky(postUser),
   postGetUser: funky(postGetUser)
 }
+```
+
+## Side-effects
+
+Side-effect producing dependencies should be passed in as extra arguments to redux-thunk. It is often useful to curry these functions to allow a `railway-oriented` programming style. Use an auto-curried functional toolbelt like ramda or lodash/fp for maximum style points.
+
+```
+const store = createStore(
+  reducer,
+  startingState,
+  applyMiddleware(
+    thunk.withExtraArgument({
+      fetch: url => options => window.fetch(url, options)
+    })
+  )
+);
+
+const doFetch = ({ fetch }) => payload =>
+  Promise.resolve(payload)
+    .then(JSON.stringify)
+    .then(objOf("body"))
+    .then(merge({ method: "POST" }))
+    .then(fetch("https://jsonplaceholder.typicode.com/users"));
 ```

@@ -94,8 +94,8 @@ const dispatchTheSameActionTwice = ({ dispatch }) => payload =>
 // you can do this
 const dispatchTheSameActionTwice = ({ dispatchAction, dispatchError }) => payload =>
   Promise.resolve(payload)
-    .then(dispatchAction('TYPE), dispatchError('ERROR'))
-    .then(dispatchAction('TYPE), dispatchError('ERROR'));
+    .then(dispatchAction('TYPE'), dispatchError('ERROR'))
+    .then(dispatchAction('TYPE'), dispatchError('ERROR'));
 ```
 
 These helpers use `dispatch` internally to dispatch the action, but then return either a `resolved` or `rejected` payload, so you can continue chaining.

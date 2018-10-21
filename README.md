@@ -77,6 +77,31 @@ const mapDispatchToProps = {
 }
 ```
 
+## Dispatch helpers
+
+Two helpers (`dispatchAction`, `dispatchError`) are provided to make funky-thunks that dispatch actions less verbose.
+
+```
+// instead of this
+const dispatchTheSameActionTwice = ({ dispatch }) => payload =>
+  Promise.resolve(payload)
+    .then(payload => ({ type: 'TYPE', payload }))
+    .then(dispatch)
+    .then(action => action.payload)
+    .then(payload => ({ type: 'TYPE', payload }))
+    .then(dispatch);
+
+// you can do this
+const dispatchTheSameActionTwice = ({ dispatchAction, dispatchError }) => payload =>
+  Promise.resolve(payload)
+    .then(dispatchAction('TYPE), dispatchError('ERROR'))
+    .then(dispatchAction('TYPE), dispatchError('ERROR'));
+```
+
+These helpers use `dispatch` internally to dispatch the action, but then return either a `resolved` or `rejected` payload, so you can continue chaining.
+
+`dispatchError` will also include an `error` property on the action object.
+
 ## Side-effects
 
 Side-effect producing dependencies should be passed in as extra arguments to redux-thunk. It is often useful to curry these functions to allow a `railway-oriented` programming style. Use an auto-curried functional toolbelt like ramda or lodash/fp for maximum style points.
